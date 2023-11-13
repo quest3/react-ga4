@@ -95,7 +95,7 @@ export class GA4 {
       if (nonce) {
         script.setAttribute("nonce", nonce);
       }
-      document.body.appendChild(script);
+      document.head.appendChild(script);
 
       window.dataLayer = window.dataLayer || [];
       window.gtag = function gtag() {
@@ -177,9 +177,11 @@ export class GA4 {
       gtagOptions,
       nonce,
       testMode = false,
+      titleCase = true,
       gtagUrl,
     } = options;
     this._testMode = testMode;
+    this._titleCase = titleCase;
 
     if (!testMode) {
       this._loadGA(this._currentMeasurementId, nonce, gtagUrl);
@@ -216,14 +218,14 @@ export class GA4 {
     }
   };
 
-  set = (fieldsObject) => {
+  set = (fieldsObject, args = null) => {
     if (!fieldsObject) {
       console.warn("`fieldsObject` is required in .set()");
 
       return;
     }
 
-    if (typeof fieldsObject !== "object") {
+    if (typeof fieldsObject !== "object" && !args) {
       console.warn("Expected `fieldsObject` arg to be an Object");
 
       return;
@@ -233,7 +235,7 @@ export class GA4 {
       console.warn("empty `fieldsObject` given to .set()");
     }
 
-    this._gaCommand("set", fieldsObject);
+    this._gaCommand("set", fieldsObject, args);
   };
 
   _gaCommandSendEvent = (
@@ -347,10 +349,17 @@ export class GA4 {
   };
 
   _gaCommandSet = (...args) => {
-    if (typeof args[0] === "string") {
-      args[0] = { [args[0]]: args[1] };
+    const newArgs = [];
+
+    if (typeof args[0] === 'string' && typeof args[1] === 'object') {
+      newArgs.push(args[0], args[1])
+    } else if (typeof args[0] === "string") {
+      newArgs.push(this._toGtagOptions({ [args[0]]: args[1] }))
+    } else {
+      newArgs.push(this._toGtagOptions(args[0]))
     }
-    this._gtag("set", this._toGtagOptions(args[0]));
+
+    this._gtag("set", ...newArgs);
   };
 
   _gaCommand = (command, ...args) => {
@@ -417,13 +426,13 @@ export class GA4 {
       // Required Fields
       const fieldObject = {
         hitType: "event",
-        eventCategory: format(category),
-        eventAction: format(action),
+        eventCategory: format(category, this._titleCase),
+        eventAction: format(action, this._titleCase),
       };
 
       // Optional Fields
       if (label) {
-        fieldObject.eventLabel = format(label);
+        fieldObject.eventLabel = format(label, this._titleCase);
       }
 
       if (typeof value !== "undefined") {
