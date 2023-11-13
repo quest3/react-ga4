@@ -59,6 +59,7 @@ export class GA4 {
     initialize: (GA_MEASUREMENT_ID: InitOptions[] | string, options?: {
         nonce?: string;
         testMode?: boolean;
+        titleCase?: boolean;
         gtagUrl?: string;
         gaOptions?: GaOptions | any;
         gtagOptions?: any;
