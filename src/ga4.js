@@ -56,6 +56,7 @@ export class GA4 {
     this.isInitialized = false;
 
     this._testMode = false;
+    this._titleCase = true;
     this._currentMeasurementId;
     this._hasLoadedGA = false;
     this._isQueuing = false;
@@ -157,6 +158,7 @@ export class GA4 {
    * @param {Object} [options]
    * @param {string} [options.nonce]
    * @param {boolean} [options.testMode=false]
+   * @param {boolean} [options.titleCase=true]
    * @param {string} [options.gtagUrl=https://www.googletagmanager.com/gtag/js]
    * @param {GaOptions|any} [options.gaOptions]
    * @param {Object} [options.gtagOptions] New parameter

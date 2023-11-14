@@ -39,6 +39,7 @@ export class GA4 {
     reset: () => void;
     isInitialized: boolean;
     _testMode: boolean;
+    _titleCase: boolean;
     _hasLoadedGA: boolean;
     _isQueuing: boolean;
     _queueGtag: any[];
@@ -52,6 +53,7 @@ export class GA4 {
      * @param {Object} [options]
      * @param {string} [options.nonce]
      * @param {boolean} [options.testMode=false]
+     * @param {boolean} [options.titleCase=true]
      * @param {string} [options.gtagUrl=https://www.googletagmanager.com/gtag/js]
      * @param {GaOptions|any} [options.gaOptions]
      * @param {Object} [options.gtagOptions] New parameter
@@ -65,7 +67,7 @@ export class GA4 {
         gtagOptions?: any;
     }) => void;
     _currentMeasurementId: string;
-    set: (fieldsObject: any) => void;
+    set: (fieldsObject: any, args?: any) => void;
     _gaCommandSendEvent: (eventCategory: any, eventAction: any, eventLabel: any, eventValue: any, fieldsObject: any) => void;
     _gaCommandSendEventParameters: (...args: any[]) => void;
     _gaCommandSendTiming: (timingCategory: any, timingVar: any, timingValue: any, timingLabel: any) => void;
